@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.ts", "../src/file2.ts"],
+  "sourcesContent": ["#!/usr/bin/env node\nimport name from './file2';\n\nconsole.log({name});\nexport const add = (a: number, b: number): number => a + b;\n", "const name = 'test1';\nexport default name;\n"],
+  "mappings": ";8gBAAA,0BCAA,GAAM,GAAO,QACN,EAAQ,EDEf,QAAQ,IAAI,CAAC,SACN,GAAM,GAAM,CAAC,EAAW,IAAsB,EAAI",
+  "names": []
+}
