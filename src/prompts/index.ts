@@ -9,7 +9,7 @@ export const promptNoteTitle = async () =>
       message: 'Meeting title?',
       validate(value) {
         const valid = !isNaN(value.length);
-        return valid || 'Please enter a meeting title';
+        return valid || 'Please enter a note title';
       }
     }
   ]);

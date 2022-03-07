@@ -3,7 +3,7 @@ import {
   createNoteObjFromFilePath,
   setNoteContent,
   writeNoteToFileAction
-} from './note';
+} from '../../services/note';
 import { joinPaths } from '../../utils';
 import { promptNoteTitle } from '../../prompts';
 

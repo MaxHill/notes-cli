@@ -4,8 +4,8 @@ import {
   createNoteObjFromFilePath,
   setNoteContent,
   splitFileAndPath
-} from './note';
-import { INote } from './types';
+} from './';
+import { INote } from '../../types';
 
 describe('Note', () => {
   describe('splitFileAndPath()', () => {

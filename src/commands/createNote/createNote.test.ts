@@ -1,9 +1,9 @@
 import genericNote, { baseDir } from '.';
-import { writeNoteToFileAction } from './note';
+import { writeNoteToFileAction } from '../../services/note';
 import { promptNoteTitle } from '../../prompts';
 
-jest.mock('./note', () => ({
-  ...jest.requireActual('./note'),
+jest.mock('../../services/note', () => ({
+  ...jest.requireActual('../../services/note'),
   writeNoteToFileAction: jest.fn()
 }));
 

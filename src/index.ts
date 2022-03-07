@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import genericNote from './commands/genericNote';
+import creataNote from './commands/createNote';
 
 program
   .command('new [filename]')
@@ -12,4 +12,4 @@ program
     `Alternative way of specifying fileName`,
     ''
   )
-  .action(genericNote);
+  .action(creataNote);
