@@ -9,7 +9,8 @@ import {
   last,
   init,
   set,
-  curry
+  curry,
+  pipe
 } from 'ramda';
 import { appendIfNotExist } from '../../utils';
 
@@ -74,7 +75,11 @@ export const addTrailingSlashToNotePath = over(
 export const setNoteContent = curry(set(lensProp<INote>('content')));
 
 /**
- * Returns a noteFactory with specific content
+ * Create note a object from filepath
  */
-export const noteFactoryWithContent = (content: string) =>
-  mergeRight<INote>(noteFactory({ content })) as (n: Partial<INote>) => INote;
+export const createNoteObjFromFilePath = pipe(
+  splitFileAndPath,
+  noteFactory,
+  addMdToNoteFilename,
+  addTrailingSlashToNotePath
+);

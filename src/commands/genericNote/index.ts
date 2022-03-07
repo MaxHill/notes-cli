@@ -1,11 +1,7 @@
-import { INote } from './types';
-import { curry, pipe } from 'ramda';
+import { pipe } from 'ramda';
 import {
-  addMdToNoteFilename,
-  addTrailingSlashToNotePath,
-  noteFactory,
+  createNoteObjFromFilePath,
   setNoteContent,
-  splitFileAndPath,
   writeNoteToFileAction
 } from './note';
 import { joinPaths } from '../../utils';
@@ -20,28 +16,24 @@ type Flags = {
 };
 
 export default async (
-  fileArg: string,
+  filename: string,
   { folder, content = '', fileFlag }: Flags
 ) => {
   try {
-    const filePath = fileArg || fileFlag || (await promptNoteTitle());
-
+    const filePath = filename || fileFlag || (await promptNoteTitle());
     const totalFilePath = joinPaths(baseDir, folder, filePath);
-    const base = createNoteFromFilePath(content)(totalFilePath);
-    const note = setNoteContent(content, base);
-    writeNoteToFileAction(note);
-    console.log(note.path + note.fileName);
+
+    const createNote = pipe(
+      createNoteObjFromFilePath,
+      setNoteContent(content),
+      writeNoteToFileAction,
+      (n) => console.log(n.path + n.fileName)
+    );
+
+    createNote(totalFilePath);
     process.exit(0);
   } catch (error) {
     console.error(error);
     process.exit(1);
   }
 };
-
-export const createNoteFromFilePath = (content: string = '') =>
-  pipe(
-    splitFileAndPath,
-    noteFactory,
-    addMdToNoteFilename,
-    addTrailingSlashToNotePath
-  );

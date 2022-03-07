@@ -9,14 +9,20 @@ jest.mock('./note', () => ({
 
 jest.mock('../../prompts', () => ({
   ...jest.requireActual('../../prompts'),
-  promptNoteTitle: () => Promise.resolve('test-prompted-note')
+  promptNoteTitle: jest.fn()
 }));
 
 const processExit = jest.spyOn(process, 'exit').mockImplementation();
-//const consoleLog = jest.spyOn(console, 'log').mockImplementation();
+const consoleLog = jest.spyOn(console, 'log').mockImplementation();
 
 describe('genericNote', () => {
-  beforeEach(() => jest.resetAllMocks());
+  beforeEach(() => {
+    jest.resetAllMocks();
+    (promptNoteTitle as jest.Mock).mockImplementation(() =>
+      Promise.resolve('test-prompted-note')
+    );
+    (writeNoteToFileAction as jest.Mock).mockImplementation((n) => n);
+  });
 
   it('Can create Note from file path', () => {
     genericNote('path/to/file', {});
@@ -27,7 +33,7 @@ describe('genericNote', () => {
     });
   });
 
-  it.only('Can add content to the note', () => {
+  it('Can add content to the note', () => {
     genericNote('path/to/file', { content: 'test-content' });
     expect(writeNoteToFileAction).toHaveBeenCalledWith(
       expect.objectContaining({

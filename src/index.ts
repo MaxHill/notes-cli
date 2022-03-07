@@ -7,4 +7,9 @@ program
   .description('Create a new note')
   .option('-f, --folder <folder>', 'Sub folder of basedir notes directory', '')
   .option('-c, --content <content>', `Text to be added to file`, '')
+  .option(
+    '-fi, --fileName <fileFlag>',
+    `Alternative way of specifying fileName`,
+    ''
+  )
   .action(genericNote);

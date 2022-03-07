@@ -1,4 +1,10 @@
-import { addMdToNoteFilename, addTrailingSlashToNotePath, splitFileAndPath } from './note';
+import {
+  addMdToNoteFilename,
+  addTrailingSlashToNotePath,
+  createNoteObjFromFilePath,
+  setNoteContent,
+  splitFileAndPath
+} from './note';
 import { INote } from './types';
 
 describe('Note', () => {
@@ -46,6 +52,31 @@ describe('Note', () => {
 
       expect(addTrailingSlashToNotePath(note)).toEqual({
         fileName: 'test',
+        path: 'path/to/note/',
+        content: ''
+      });
+    });
+  });
+
+  describe('setContent', () => {
+    it('Can set the content of a note', () => {
+      const note = {
+        fileName: 'test',
+        path: 'path/to/note/',
+        content: ''
+      };
+      expect(setNoteContent('test', note)).toEqual({
+        fileName: 'test',
+        path: 'path/to/note/',
+        content: 'test'
+      });
+    });
+  });
+
+  describe('createNoteObjFromFilePath', () => {
+    it('Can create a note from a file path', () => {
+      expect(createNoteObjFromFilePath('path/to/note/test')).toEqual({
+        fileName: 'test.md',
         path: 'path/to/note/',
         content: ''
       });
