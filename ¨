@@ -1,0 +1,92 @@
+import {
+  complement,
+  filter,
+  isEmpty,
+  map,
+  pipe,
+  reduce,
+  split,
+  trim
+} from 'ramda';
+import { indentationAmount, runCommand, splitOnNewLine } from '../../utils';
+
+export const getListOfMeetings = () => {
+  const bulletIndicator = '3b95a551-26f9-4bc0-bfbc-33b1ecb8155f';
+  const result = runCommand('icalBuddy', [
+    '-b',
+    bulletIndicator,
+    '-ea',
+    'eventsNow'
+  ]);
+
+  return pipe(
+    split(bulletIndicator),
+    filter(complement(isEmpty)),
+    map(transformToObject)
+  )(result);
+};
+
+/**
+ * Parse line to array of objects
+ * @param acc
+ * @param line
+ */
+const lineToObjectReducer = reduce((acc, line: string) => {
+  const indentation = indentationAmount(line);
+  const indentLevel = indentation / 4;
+
+  switch (indentLevel) {
+    case 0:
+      return [...acc, { title: line.trim() }];
+    case 1:
+      return [...acc, level1Parse(line)];
+    default:
+      return level2Parse(acc, line);
+  }
+}, []);
+
+/**
+ * Transform string to meeting object
+ */
+const transformToObject = pipe(
+  trim,
+  splitOnNewLine,
+  lineToObjectReducer,
+  reduce((result, obj: Object) => ({ ...result, ...obj }), {})
+);
+
+/**
+ * Parse key/val string to object
+ * @param line
+ */
+const level1Parse = (line: string) => {
+  const matchKeyVal = /^([a-zA-Z]+):(.+)/g;
+  const matchTime = /^([0-9]+:[0-9]+).-.([0-9]+:[0-9]+)/g;
+
+  const [, key, val] = matchKeyVal.exec(line.trim()) || [];
+  if (key && val) return { [key]: val.trim() };
+
+  const [, start, end] = matchTime.exec(line.trim()) || [];
+  if (start && end) {
+    return {
+      time: `${start}-${end}`
+    };
+  }
+
+  return {};
+};
+
+/**
+ * Add string to last item in the array
+ * @param acc
+ * @param line
+ */
+const level2Parse = (acc, line: string) => {
+  let newAcc = JSON.parse(JSON.stringify(acc)); // clone array
+  const i = newAcc.length - 1; // Find last index
+  const key = Object.keys(newAcc[i])[0]; // Find the first (and only key of the object)
+
+  newAcc[i][key] += '\n' + line.trim(); // Add new line to the string
+
+  return newAcc;
+};

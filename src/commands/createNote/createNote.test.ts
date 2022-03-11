@@ -1,4 +1,4 @@
-import genericNote, { baseDir } from '.';
+import createNote, { baseDir } from '.';
 import { writeNoteToFileAction } from '../../services/note';
 import { promptNoteTitle } from '../../prompts';
 
@@ -25,7 +25,7 @@ describe('genericNote', () => {
   });
 
   it('Can create Note from file path', () => {
-    genericNote('path/to/file', {});
+    createNote('path/to/file', {});
     expect(writeNoteToFileAction).toHaveBeenCalledWith({
       fileName: 'file.md',
       path: baseDir + 'path/to/',
@@ -34,7 +34,7 @@ describe('genericNote', () => {
   });
 
   it('Can add content to the note', () => {
-    genericNote('path/to/file', { content: 'test-content' });
+    createNote('path/to/file', { content: 'test-content' });
     expect(writeNoteToFileAction).toHaveBeenCalledWith(
       expect.objectContaining({
         content: 'test-content'
@@ -43,7 +43,7 @@ describe('genericNote', () => {
   });
 
   it('Can specify a folder in baseDir', () => {
-    genericNote('path/to/file', { folder: 'test-folder' });
+    createNote('path/to/file', { folder: 'test-folder' });
     expect(writeNoteToFileAction).toHaveBeenCalledWith(
       expect.objectContaining({
         path: baseDir + 'test-folder/path/to/'
@@ -52,7 +52,7 @@ describe('genericNote', () => {
   });
 
   it('Accepts filePath as a flag aswell', () => {
-    genericNote('', { fileFlag: 'test-file' });
+    createNote('', { fileFlag: 'test-file' });
     expect(writeNoteToFileAction).toHaveBeenCalledWith(
       expect.objectContaining({
         fileName: 'test-file.md'
@@ -61,12 +61,12 @@ describe('genericNote', () => {
   });
 
   it('Outputs the created file', () => {
-    genericNote('test-file', {});
+    createNote('test-file', {});
     expect(consoleLog).toHaveBeenCalledWith(baseDir + 'test-file.md');
   });
 
   it('Exits with 0 code if successfull', () => {
-    genericNote('test-file', {});
+    createNote('test-file', {});
     expect(processExit).toHaveBeenCalledWith(0);
   });
 
@@ -74,14 +74,14 @@ describe('genericNote', () => {
     // Don't know how to force an error
     const consoleError = jest.spyOn(console, 'error').mockImplementation();
 
-    genericNote('', {});
+    createNote('', {});
 
     expect(processExit).toHaveBeenCalledWith(1);
     expect(consoleError).toHaveBeenCalledWith(new Error('Specify a filename'));
   });
 
   it('Prompts for note name if not specified', async () => {
-    await genericNote('', {});
+    await createNote('', {});
     expect(consoleLog).toHaveBeenCalledWith(baseDir + 'test-prompted-note.md');
   });
 });

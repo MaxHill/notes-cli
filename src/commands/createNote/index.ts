@@ -7,7 +7,7 @@ import {
 import { joinPaths } from '../../utils';
 import { promptNoteTitle } from '../../prompts';
 
-export const baseDir = '/base/dir/';
+export const baseDir = '~/Dropbox/Notes/';
 
 type Flags = {
   folder?: string;
