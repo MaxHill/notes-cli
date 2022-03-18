@@ -24,13 +24,13 @@ export default async ({ folder = '', content }: Flags) => {
     folder: folder
   });
 
-  const flags2 = pipe(
+  const flags = pipe(
     getListOfMeetings,
     selectMeeting,
     andThen(flagsFromMeeting)
   );
 
-  createNote('', await flags2());
+  createNote('', await flags());
 };
 
 const selectMeeting = async (meetings: IMeeting[]) => {
