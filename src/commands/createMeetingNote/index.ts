@@ -1,5 +1,5 @@
 import { format } from 'date-fns/fp';
-import { andThen, curry, pipe, pipeP, pipeWith } from 'ramda';
+import { andThen, pipe } from 'ramda';
 import {
   promptSelectMeetingFromList,
   promptSetMeetingTitleManually

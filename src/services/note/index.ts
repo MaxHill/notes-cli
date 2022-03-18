@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import { INote } from './types';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { INote } from '../../types';
 import {
   lensProp,
   over,
@@ -10,9 +10,12 @@ import {
   init,
   set,
   curry,
-  pipe
+  pipe,
+  startsWith,
+  slice
 } from 'ramda';
-import { appendIfNotExist } from '../../utils';
+import { appendIfNotExist, joinPaths } from '../../utils';
+import os from 'os';
 
 /**
  * Create a note object with default values
@@ -27,12 +30,23 @@ export const noteFactory = mergeRight<INote>({
  * Create a file based on a note object
  */
 export const writeNoteToFileAction = (note: INote): INote => {
-  const filePath = note.path + note.fileName;
-  if (fs.existsSync(filePath)) return note;
+  const fullPath = joinPaths(note.path, note.fileName);
+  const filePath = startsWith('~', fullPath) ? setHomePath(fullPath) : fullPath;
 
-  fs.mkdirSync(note.path, { recursive: true });
-  fs.writeFileSync(filePath, note.content);
+  if (existsSync(filePath)) return note;
+
+  mkdirSync(note.path, { recursive: true });
+  writeFileSync(filePath, note.content);
+
   return note;
+};
+
+/**
+ * Replace ~ with the actual path to user directory. ex /Users/johndoe
+ */
+const setHomePath = (path: string): string => {
+  const stripFirstChar = slice(1, Infinity);
+  return joinPaths(os.homedir(), stripFirstChar(path));
 };
 
 /**

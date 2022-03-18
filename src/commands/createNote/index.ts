@@ -6,8 +6,7 @@ import {
 } from '../../services/note';
 import { joinPaths } from '../../utils';
 import { promptNoteTitle } from '../../prompts';
-
-export const baseDir = '~/Dropbox/Notes/';
+import { getOrCreateConfig } from '../../services/config';
 
 type Flags = {
   folder?: string;
@@ -20,6 +19,7 @@ export default async (
   { folder, content = '', fileFlag }: Flags
 ) => {
   try {
+    const { baseDir } = await getOrCreateConfig();
     const filePath = filename || fileFlag || (await promptNoteTitle());
     const totalFilePath = joinPaths(baseDir, folder, filePath);
 

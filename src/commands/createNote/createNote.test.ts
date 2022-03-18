@@ -1,6 +1,7 @@
-import createNote, { baseDir } from '.';
+import createNote from '.';
 import { writeNoteToFileAction } from '../../services/note';
 import { promptNoteTitle } from '../../prompts';
+import { getOrCreateConfig } from '../../services/config';
 
 jest.mock('../../services/note', () => ({
   ...jest.requireActual('../../services/note'),
@@ -12,8 +13,14 @@ jest.mock('../../prompts', () => ({
   promptNoteTitle: jest.fn()
 }));
 
+jest.mock('../../services/config', () => ({
+  getOrCreateConfig: jest.fn()
+}));
+
 const processExit = jest.spyOn(process, 'exit').mockImplementation();
 const consoleLog = jest.spyOn(console, 'log').mockImplementation();
+
+const baseDir = 'test/baseDir/';
 
 describe('genericNote', () => {
   beforeEach(() => {
@@ -21,11 +28,19 @@ describe('genericNote', () => {
     (promptNoteTitle as jest.Mock).mockImplementation(() =>
       Promise.resolve('test-prompted-note')
     );
+    (getOrCreateConfig as jest.Mock).mockReturnValue(
+      Promise.resolve({ baseDir })
+    );
     (writeNoteToFileAction as jest.Mock).mockImplementation((n) => n);
   });
 
-  it('Can create Note from file path', () => {
-    createNote('path/to/file', {});
+  it("get's the config from config", async () => {
+    await createNote('path/to/file', {});
+    expect(getOrCreateConfig).toHaveBeenCalled();
+  });
+
+  it('Can create Note from file path', async () => {
+    await createNote('path/to/file', {});
     expect(writeNoteToFileAction).toHaveBeenCalledWith({
       fileName: 'file.md',
       path: baseDir + 'path/to/',
@@ -33,8 +48,8 @@ describe('genericNote', () => {
     });
   });
 
-  it('Can add content to the note', () => {
-    createNote('path/to/file', { content: 'test-content' });
+  it('Can add content to the note', async () => {
+    await createNote('path/to/file', { content: 'test-content' });
     expect(writeNoteToFileAction).toHaveBeenCalledWith(
       expect.objectContaining({
         content: 'test-content'
@@ -42,8 +57,8 @@ describe('genericNote', () => {
     );
   });
 
-  it('Can specify a folder in baseDir', () => {
-    createNote('path/to/file', { folder: 'test-folder' });
+  it('Can specify a folder in baseDir', async () => {
+    await createNote('path/to/file', { folder: 'test-folder' });
     expect(writeNoteToFileAction).toHaveBeenCalledWith(
       expect.objectContaining({
         path: baseDir + 'test-folder/path/to/'
@@ -51,8 +66,8 @@ describe('genericNote', () => {
     );
   });
 
-  it('Accepts filePath as a flag aswell', () => {
-    createNote('', { fileFlag: 'test-file' });
+  it('Accepts filePath as a flag aswell', async () => {
+    await createNote('', { fileFlag: 'test-file' });
     expect(writeNoteToFileAction).toHaveBeenCalledWith(
       expect.objectContaining({
         fileName: 'test-file.md'
@@ -60,13 +75,13 @@ describe('genericNote', () => {
     );
   });
 
-  it('Outputs the created file', () => {
-    createNote('test-file', {});
+  it('Outputs the created file', async () => {
+    await createNote('test-file', {});
     expect(consoleLog).toHaveBeenCalledWith(baseDir + 'test-file.md');
   });
 
-  it('Exits with 0 code if successfull', () => {
-    createNote('test-file', {});
+  it('Exits with 0 code if successfull', async () => {
+    await createNote('test-file', {});
     expect(processExit).toHaveBeenCalledWith(0);
   });
 

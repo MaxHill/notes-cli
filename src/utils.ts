@@ -15,7 +15,7 @@ export const prependIfNotExist = curry((prefix: string, str: string) => {
 });
 
 const removeRepeatedSlashes = replace(/\/(\/*)\//g, '/');
-export const joinPaths = (...paths) =>
+export const joinPaths = (...paths: string[]) =>
   pipe(join('/'), removeRepeatedSlashes)(paths);
 
 export const splitOnNewLine = split(/\r?\n/);

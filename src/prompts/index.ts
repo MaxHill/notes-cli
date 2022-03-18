@@ -37,3 +37,16 @@ export const promptSetMeetingTitleManually = async () =>
       }
     }
   ]).catch(console.error);
+
+export const promptCreateConfig = async () =>
+  await prompt([
+    {
+      type: 'input',
+      name: 'baseDir',
+      message: 'Where should notes be stored?',
+      validate(value) {
+        const valid = !isNaN(value.length);
+        return valid || 'You must specify where to store the notes';
+      }
+    }
+  ]).catch(console.error);

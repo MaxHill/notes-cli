@@ -2,11 +2,8 @@ import { format } from 'date-fns/fp';
 import {
   complement,
   filter,
-  has,
-  ifElse,
   isEmpty,
   join,
-  length,
   lensIndex,
   map,
   mapObjIndexed,
