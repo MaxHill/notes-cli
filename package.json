@@ -1,6 +1,6 @@
 {
   "name": "@maxhill/notes-cli",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "Commandline utility for creating notes",
   "main": "./lib/index.js",
   "bin": {
@@ -9,7 +9,8 @@
   "scripts": {
     "test": "jest",
     "build": "rimraf lib && node ./esbuild.js",
-    "watch": "rimraf lib && node ./esbuild.js --watch"
+    "watch": "rimraf lib && node ./esbuild.js --watch",
+    "semantic-release": "semantic-release"
   },
   "author": "Max Hill",
   "license": "MIT",
@@ -31,7 +32,8 @@
     "jest": "^27.5.1",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.2",
+    "semantic-release": "^19.0.2"
   },
   "jest": {
     "transform": {
@@ -45,5 +47,9 @@
     "ramda": "^0.28.0",
     "xdg": "^0.1.1",
     "yaml": "^1.10.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaxHill/notes-cli.git"
   }
 }
