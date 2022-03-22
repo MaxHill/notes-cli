@@ -31,6 +31,10 @@ icalBuddy eventsToday
 ## Usage
 
 ```
+notes-cli new noteName
+```
+
+```
 Usage: notes-cli [options] [command]
 
 Options:
