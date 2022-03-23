@@ -1,3 +1,10 @@
+## [0.0.3](https://github.com/MaxHill/notes-cli/compare/v0.0.2...v0.0.3) (2022-03-23)
+
+
+### Bug Fixes
+
+* **writeNoteToFile:** replace ~ with actual home-dir ([41883a5](https://github.com/MaxHill/notes-cli/commit/41883a597bca51e0368b9873b5907228613edf74))
+
 ## [0.0.2](https://github.com/MaxHill/notes-cli/compare/v0.0.1...v0.0.2) (2022-03-22)
 
 
