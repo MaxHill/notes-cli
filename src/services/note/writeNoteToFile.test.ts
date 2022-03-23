@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+import { writeFileSync, mkdirSync } from 'fs';
 import os from 'os';
 import { writeNoteToFileAction } from '.';
 
@@ -45,5 +45,20 @@ describe('createNoteObjFromFilePath', () => {
       '/Users/test/path/to/note/test',
       ''
     );
+  });
+
+  it('Creates the correct path', () => {
+    (os.homedir as jest.Mock).mockReturnValue('/Users/test');
+    const note = {
+      fileName: 'test',
+      path: '~/path/to/note/',
+      content: ''
+    };
+
+    writeNoteToFileAction(note);
+
+    expect(mkdirSync).toHaveBeenCalledWith('/Users/test/path/to/note/', {
+      recursive: true
+    });
   });
 });

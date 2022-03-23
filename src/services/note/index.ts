@@ -30,12 +30,12 @@ export const noteFactory = mergeRight<INote>({
  * Create a file based on a note object
  */
 export const writeNoteToFileAction = (note: INote): INote => {
-  const fullPath = joinPaths(note.path, note.fileName);
-  const filePath = startsWith('~', fullPath) ? setHomePath(fullPath) : fullPath;
+  const path = startsWith('~', note.path) ? setHomePath(note.path) : note.path;
+  const filePath = joinPaths(path, note.fileName);
 
   if (existsSync(filePath)) return note;
 
-  mkdirSync(note.path, { recursive: true });
+  mkdirSync(path, { recursive: true });
   writeFileSync(filePath, note.content);
 
   return note;
