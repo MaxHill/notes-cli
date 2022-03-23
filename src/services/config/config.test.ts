@@ -1,7 +1,8 @@
-import { writeFileSync, existsSync } from 'fs';
+import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { createConfig, getConfig, getOrCreateConfig } from '.';
 import { promptCreateConfig } from '../../prompts';
 import { runCommand } from '../../utils';
+const basedir = require('xdg').basedir;
 
 jest.mock('../../utils', () => ({
   ...jest.requireActual('../../utils'),
@@ -11,6 +12,7 @@ jest.mock('../../utils', () => ({
 jest.mock('fs', () => ({
   ...jest.requireActual('fs'),
   existsSync: jest.fn(),
+  mkdirSync: jest.fn(),
   writeFileSync: jest.fn()
 }));
 
@@ -77,6 +79,15 @@ describe('Config', () => {
 
     expect(await getOrCreateConfig()).toEqual({
       baseDir: 'create/config/path'
+    });
+  });
+
+  it('Creates the correct path', async () => {
+    const configPath = basedir.configPath('notes-cli');
+    await createConfig();
+
+    expect(mkdirSync).toHaveBeenCalledWith(configPath, {
+      recursive: true
     });
   });
 });
