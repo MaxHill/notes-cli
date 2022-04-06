@@ -1,3 +1,10 @@
+## [0.0.4](https://github.com/MaxHill/notes-cli/compare/v0.0.3...v0.0.4) (2022-04-06)
+
+
+### Bug Fixes
+
+* **config:** make config create folder if it does not exist ([d87aedb](https://github.com/MaxHill/notes-cli/commit/d87aedb206a53292a626d4fbb52efc9f55d12faa))
+
 ## [0.0.3](https://github.com/MaxHill/notes-cli/compare/v0.0.2...v0.0.3) (2022-03-23)
 
 
